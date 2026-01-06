@@ -188,21 +188,38 @@
     </div>
     <!--/ Abstract. -->
 
-    <!-- 3D Visualization. -->
+    <!-- Flow Visualization. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">3D Visualization</h2>
-        <div class="content">
-          <iframe src="./static/pyvista/blockstack.html" 
-                  width="100%" 
-                  height="600" 
-                  style="border: none; border-radius: 8px;"
-                  allowfullscreen>
-          </iframe>
+        <h2 class="title is-3">3D Point Track Visualization</h2>
+        <div class="columns is-vcentered" style="margin-top: 1rem;">
+          <!-- Image on the left -->
+          <div class="column is-half">
+            <img src="./static/track_preds/blockstack.png" alt="Block Stack Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Interactive 3D visualization on the right -->
+          <div class="column is-half">
+            <div class="content" style="margin-bottom: 0.5rem;">
+              <span style="display: inline-flex; align-items: center; margin-right: 1.5rem;">
+                <span style="display: inline-block; width: 24px; height: 3px; background: #e74c3c; margin-right: 6px;"></span>
+                <span style="font-size: 0.9rem;">Predicted Point Track</span>
+              </span>
+              <span style="display: inline-flex; align-items: center;">
+                <span style="display: inline-block; width: 10px; height: 10px; background: #888; border-radius: 50%; margin-right: 6px;"></span>
+                <span style="font-size: 0.9rem;">Initial Point</span>
+              </span>
+            </div>
+            <iframe src="./static/track_preds/blockstack.html" 
+                    width="100%" 
+                    height="500" 
+                    style="border: none; border-radius: 8px;"
+                    allowfullscreen>
+            </iframe>
+          </div>
         </div>
       </div>
     </div>
-    <!--/ 3D Visualization. -->
+    <!--/ Flow Visualization. -->
 
   </div>
 </section>
