@@ -134,23 +134,21 @@
   </div>
 </section>
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <!-- Video disabled -->
-      <!-- <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video> -->
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">METHOD</span> learns dense, embodiment-agnostic 3D point track prediction from actionless videos, and then trains embodiment-specific manipulation policies conditioned on the predicted tracks.
-    </div>
-  </div>
-</section>
-
-
 <section class="section">
   <div class="container is-max-desktop">
+    <!-- Teaser. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <ol>
+            <li>Learn dense, embodiment-agnostic <strong>3D point track prediction</strong> from actionless videos</li>
+            <li>Train sample-efficient, embodiment-specific manipulation <strong>policies conditioned on the predicted tracks</strong></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!--/ Teaser. -->
+
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -178,7 +176,18 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">3D Point Track Visualization</h2>
-        <p style="margin-top: 0.5rem; margin-bottom: 1rem;">** 3D tracks subsampled to 1024 points to reduce file sizes. Our track-conditioned policy uses 2048 points.</p>
+        <p style="margin-top: 0.5rem; margin-bottom: 1rem;">* 3D visualizations are subsampled to 1024 points to reduce file sizes. Our track-conditioned policies uses 2048 points. *</p>
+        <!-- Legend centered above visualization -->
+        <div class="content has-text-centered" style="margin-top: 1rem; margin-bottom: 1rem;">
+          <span style="display: inline-flex; align-items: center; margin-right: 1.5rem;">
+            <span style="display: inline-block; width: 24px; height: 3px; background: rgb(230, 26, 26); margin-right: 6px;"></span>
+            <span style="font-size: 0.9rem;">Predicted Point Track</span>
+          </span>
+          <span style="display: inline-flex; align-items: center;">
+            <span style="display: inline-block; width: 10px; height: 10px; background: rgb(77, 77, 77); border-radius: 50%; margin-right: 6px;"></span>
+            <span style="font-size: 0.9rem;">Initial Point</span>
+          </span>
+        </div>
         <div class="columns is-vcentered" style="margin-top: 1rem;">
           <!-- Image on the left -->
           <div class="column is-half">
@@ -186,16 +195,6 @@
           </div>
           <!-- Interactive 3D visualization on the right -->
           <div class="column is-half">
-            <div class="content" style="margin-bottom: 0.5rem;">
-              <span style="display: inline-flex; align-items: center; margin-right: 1.5rem;">
-                <span style="display: inline-block; width: 24px; height: 3px; background: rgb(230, 26, 26); margin-right: 6px;"></span>
-                <span style="font-size: 0.9rem;">Predicted Point Track</span>
-              </span>
-              <span style="display: inline-flex; align-items: center;">
-                <span style="display: inline-block; width: 10px; height: 10px; background: rgb(77, 77, 77); border-radius: 50%; margin-right: 6px;"></span>
-                <span style="font-size: 0.9rem;">Initial Point</span>
-              </span>
-            </div>
             <iframe src="./static/track_preds/blockstack.html" 
                     width="100%" 
                     height="500" 
