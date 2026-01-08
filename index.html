@@ -154,31 +154,18 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
-          </p>
-          <p>
-            Our approach augments neural radiance fields
-            (NeRF)
-          </p>
-          <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models
-          </p>
+          
         </div>
       </div>
     </div>
     <!--/ Abstract. -->
 
     <!-- Flow Visualization. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">3D Point Track Visualization</h2>
-        <p style="margin-top: 0.5rem; margin-bottom: 1rem;">* 3D visualizations are subsampled to 1024 points to reduce file sizes. Our track-conditioned policies use 2048 points. *</p>
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <!-- <p style="margin-top: 0.5rem; margin-bottom: 1rem; text-align: center;">* 3D visualizations are subsampled to 1024 points to reduce file sizes. Our track-conditioned policies use 2048 points. *</p> -->
         <!-- Legend centered above visualization -->
-        <div class="content has-text-centered" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <!-- <div class="content has-text-centered" style="margin-top: 1rem; margin-bottom: 1rem;">
           <span style="display: inline-flex; align-items: center; margin-right: 1.5rem;">
             <span style="display: inline-block; width: 24px; height: 3px; background: rgb(230, 26, 26); margin-right: 6px;"></span>
             <span style="font-size: 0.9rem;">Predicted Point Track</span>
@@ -187,20 +174,104 @@
             <span style="display: inline-block; width: 10px; height: 10px; background: rgb(77, 77, 77); border-radius: 50%; margin-right: 6px;"></span>
             <span style="font-size: 0.9rem;">Initial Point</span>
           </span>
+        </div> -->
+        <!-- Three column layout -->
+        <!-- Titles row -->
+        <div class="columns is-vcentered" style="margin-top: 1rem; margin-bottom: 0.5rem; align-items: center;">
+          <div class="column is-one-third has-text-centered">
+            <h3 class="title is-5" style="margin-bottom: 0;">Initial Frame</h3>
+          </div>
+          <div style="font-size: 3rem; margin: 0 0.5rem;">→</div>
+          <div class="column is-one-third has-text-centered">
+            <h3 class="title is-5" style="margin-bottom: 0;">3D Point Track Prediction</h3>
+          </div>
+          <div style="font-size: 3rem; margin: 0 0.5rem;">→</div>
+          <div class="column is-one-third has-text-centered">
+            <h3 class="title is-5" style="margin-bottom: 0;">Policy Rollout</h3>
+          </div>
         </div>
-        <div class="columns is-vcentered" style="margin-top: 1rem;">
-          <!-- Image on the left -->
-          <div class="column is-half">
+        <!-- Content row 1: Block Stack -->
+        <div class="columns is-vcentered">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
             <img src="./static/track_preds/blockstack.png" alt="Block Stack Scene" style="border-radius: 8px; width: 100%;">
           </div>
-          <!-- Interactive 3D visualization on the right -->
-          <div class="column is-half">
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
             <iframe src="./static/track_preds/blockstack.html" 
                     width="100%" 
-                    height="500" 
+                    height="400" 
                     style="border: none; border-radius: 8px;"
                     allowfullscreen>
             </iframe>
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/blockstack.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 2: Microwave -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/microwave.png" alt="Microwave Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <iframe src="./static/track_preds/microwave.html" 
+                    width="100%" 
+                    height="400" 
+                    style="border: none; border-radius: 8px;"
+                    allowfullscreen>
+            </iframe>
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/microwave.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 3: Glass -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/glass.png" alt="Glass Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <iframe src="./static/track_preds/glass.html" 
+                    width="100%" 
+                    height="400" 
+                    style="border: none; border-radius: 8px;"
+                    allowfullscreen>
+            </iframe>
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/glass.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </div>
