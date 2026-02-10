@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Learning sample efficient manipulation from pretrained 3D point track priors">
+        content="3D Point Tracks for Robot Manipulation Pretraining from Casual Videos">
   <meta name="keywords" content="ADD KEYWORDS">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3PoinTr: Learning sample efficient manipulation from pretrained 3D point track priors</title>
+  <title>3PoinTr</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -60,30 +60,30 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">3PoinTr: Learning sample efficient manipulation from pretrained 3D point track priors</h1>
-          <!-- <div class="is-size-5 publication-authors">
+          <h1 class="title is-1 publication-title">3PoinTr: 3D Point Tracks for Robot Manipulation Pretraining from Casual Videos</h1>
+          <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://adamhung60.github.io">Adam Hung</a><sup>1</sup>,</span>
+              <a href="https://adamhung60.github.io">Adam Hung</a>,</span>
             <span class="author-block">
-              <a href="https://www.bart-ai.com">Bardienus P. Duisterhof</a><sup>1</sup>,</span>
+              <a href="https://www.bart-ai.com">Bardienus P. Duisterhof</a>,</span>
             <span class="author-block">
-              <a href="https://ichnow.ski">Jeffrey Ichnowski</a><sup>1</sup>
+              <a href="https://ichnow.ski">Jeffrey Ichnowski</a>
             </span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Carnegie Mellon University</span>
-          </div> -->
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">Author Names Omitted for Anonymous Review</span>
+            <span class="author-block">Carnegie Mellon University</span>
           </div>
+
+          <!-- <div class="is-size-5 publication-authors">
+            <span class="author-block">Author Names Omitted for Anonymous Review</span>
+          </div> -->
 
           <div class="column has-text-centered">
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
+                <a href="insert link here"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -92,7 +92,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
+                <a href="insert link here"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -101,7 +101,7 @@
                 </a>
               </span>
               <!-- Video Link. -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -109,10 +109,10 @@
                   </span>
                   <span>Video</span>
                 </a>
-              </span>
+              </span> -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies"
+                <a href="insert link here"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -121,14 +121,14 @@
                   </a>
               </span>
               <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+              <!-- <span class="link-block">
+                <a href="insert link here"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
                   </span>
                   <span>Data</span>
-                  </a>
+                  </a> -->
             </div>
 
           </div>
@@ -143,10 +143,10 @@
     <!-- Teaser. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
+        <img src="./static/images/teaser.png" alt="Teaser" style="width: 100%; margin-bottom: 1rem;">
         <div class="content has-text-justified">
           <ol>
-            <li>Learn dense, embodiment-agnostic <strong>3D point track prediction</strong> from actionless videos</li>
-            <li>Train sample-efficient, embodiment-specific manipulation <strong>policies conditioned on the predicted tracks</strong></li>
+            3PoinTr is a general and scalable method for pretraining manipulation policies with casual human videos. Given an observed point cloud, 3PoinTr answers: <em>how will the scene evolve when completing the task?</em> We contribute a state-of-the-art 3D point track prediction transformer, and use a Perceiver IO architecture and Diffusion Policy to enable state-of-the-art imitation learning.
           </ol>
         </div>
       </div>
@@ -158,38 +158,81 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          
+          Data-efficient training of robust robot policies is the key to unlocking automation in a wide array of novel tasks. Current systems require large volumes of demonstrations to achieve robustness, which is impractical in many applications. Learning policies directly from human videos is a promising alternative that removes teleoperation costs, but it shifts the challenge toward overcoming the embodiment gap, often requiring restrictive and tightly calibrated setups. We propose 3PoinTr, a method for pretraining robot policies from casual and unconstrained human videos, enabling learning from motions natural for humans. 3PoinTr uses a transformer architecture to predict 3D point tracks as an intermediate embodiment-agnostic representation. 3D point tracks encode goal specifications, scene geometry, and spatiotemporal relationships. Using a Perceiver IO architecture, we extract a compact representation for sample-efficient behavior cloning, even when point tracks violate downstream embodiment-specific constraints. We conduct thorough evaluation on simulated and real-world tasks, and find that 3PoinTr achieves robust spatial generalization on diverse categories of manipulation tasks with only 20 action-labeled robot demonstrations. 3PoinTr outperforms the baselines, including behavior cloning methods, as well as prior methods for pretraining from human videos. We also provide evaluations of 3PoinTr's 3D point track predictions compared to an existing point track prediction baseline. We find that 3PoinTr produces more accurate and higher quality point tracks due to a lightweight yet expressive architecture built on a single transformer, in addition to a training formulation that preserves supervision of partially occluded points.
+
+
         </div>
       </div>
     </div>
     <!--/ Abstract. -->
 
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Model Architecture</h2>
+        <img src="./static/images/method.png" alt="Model Architecture" style="width: 100%;">
+        <div class="content has-text-justified" style="margin-top: 1rem;">
+          <p>
+            Diagram of the 3PoinTr network architecture. 
+            We first encode an initial point cloud, pass through a transformer decoder, and project each point token to a 3D point trajectory. 
+            This yields dense 3D point tracks that encode goal specifications, scene geometry, and spatiotemporal relationships.
+            We then aggregate the per-point trajectory features using a Perceiver IO-style cross-attention module. A small set of learned query tokens attends to the full set of point track tokens, producing a compact global representation of the task.
+            This representation is used as conditioning input to a Diffusion Policy, which generates an open-loop sequence of robot actions.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+
+    <!-- Results: 3D Point Track Prediction -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results: 3D Point Track Prediction</h2>
+        <img src="./static/images/average_metrics_barplot.png" alt="3D Point Track Prediction Results" style="width: 50%;">
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters).</p>
+      </div>
+    </div>
+    <!--/ Results: 3D Point Track Prediction -->
+
+    <!-- Results: Sample-Efficient Policy Learning -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results: Sample-Efficient Policy Learning</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-half has-text-centered">
+        <h3 class="title is-5">Simulation Tasks</h3>
+        <img src="./static/images/sim_plot.png" alt="Simulation Tasks Results" style="width: 100%;">
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Simulation task success rate vs. number of robot demonstrations. Results are averaged across the three simulation tasks.</p>
+      </div>
+      <div class="column is-half has-text-centered">
+        <h3 class="title is-5">Real-World Tasks</h3>
+        <img src="./static/images/real_table.png" alt="Real-World Tasks Results" style="width: 100%;">
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates evaluated over 10 rollouts.</p>
+      </div>
+    </div>
+    <!--/ Results: Sample-Efficient Policy Learning -->
+
     <!-- Flow Visualization. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Rollouts</h2>
+      </div>
+    </div>
     <div class="columns is-centered">
       <div class="column is-full">
-        <!-- <p style="margin-top: 0.5rem; margin-bottom: 1rem; text-align: center;">* 3D visualizations are subsampled to 1024 points to reduce file sizes. Our track-conditioned policies use 2048 points. *</p> -->
-        <!-- Legend centered above visualization -->
-        <!-- <div class="content has-text-centered" style="margin-top: 1rem; margin-bottom: 1rem;">
-          <span style="display: inline-flex; align-items: center; margin-right: 1.5rem;">
-            <span style="display: inline-block; width: 24px; height: 3px; background: rgb(230, 26, 26); margin-right: 6px;"></span>
-            <span style="font-size: 0.9rem;">Predicted Point Track</span>
-          </span>
-          <span style="display: inline-flex; align-items: center;">
-            <span style="display: inline-block; width: 10px; height: 10px; background: rgb(77, 77, 77); border-radius: 50%; margin-right: 6px;"></span>
-            <span style="font-size: 0.9rem;">Initial Point</span>
-          </span>
-        </div> -->
         <!-- Three column layout -->
         <!-- Titles row -->
         <div class="columns" style="margin-top: 1rem; margin-bottom: 0.5rem;">
           <div class="column is-one-third has-text-centered">
-            <h3 class="title is-5" style="margin-bottom: 0;">Initial Frame →</h3>
+            <h3 class="title is-5" style="margin-bottom: 0;">Input Point Cloud</h3>
           </div>
           <div class="column is-one-third has-text-centered">
-            <h3 class="title is-5" style="margin-bottom: 0;">3D Point Track Prediction →</h3>
+            <h3 class="title is-5" style="margin-bottom: 0;">3D Point Track Prediction</h3>
           </div>
           <div class="column is-one-third has-text-centered">
-            <h3 class="title is-5" style="margin-bottom: 0;">Policy Rollout</h3>
+            <h3 class="title is-5" style="margin-bottom: 0;">Example Policy Rollouts</h3>
           </div>
         </div>
         <!-- Content row 1: Block Stack -->
@@ -200,12 +243,7 @@
           </div>
           <!-- Column 2: 3D Point Track Visualization -->
           <div class="column is-one-third has-text-centered">
-            <iframe src="./static/track_preds/blockstack.html" 
-                    width="100%" 
-                    height="400" 
-                    style="border: none; border-radius: 8px;"
-                    allowfullscreen>
-            </iframe>
+            <img src="./static/track_preds/blender/blockstack.png" alt="Block Stack 3D Point Tracks" style="border-radius: 8px; width: 100%;">
           </div>
           <!-- Column 3: Rollout -->
           <div class="column is-one-third has-text-centered">
@@ -215,7 +253,7 @@
                    muted 
                    loop 
                    playsinline>
-              <source src="./static/track_preds/blockstack.mp4" type="video/mp4">
+              <source src="./static/track_preds/blockstack.mov" type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -228,12 +266,7 @@
           </div>
           <!-- Column 2: 3D Point Track Visualization -->
           <div class="column is-one-third has-text-centered">
-            <iframe src="./static/track_preds/microwave.html" 
-                    width="100%" 
-                    height="400" 
-                    style="border: none; border-radius: 8px;"
-                    allowfullscreen>
-            </iframe>
+            <img src="./static/track_preds/blender/microwave.png" alt="Microwave 3D Point Tracks" style="border-radius: 8px; width: 100%;">
           </div>
           <!-- Column 3: Rollout -->
           <div class="column is-one-third has-text-centered">
@@ -243,7 +276,7 @@
                    muted 
                    loop 
                    playsinline>
-              <source src="./static/track_preds/microwave.mp4" type="video/mp4">
+              <source src="./static/track_preds/microwave.mov" type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -256,12 +289,7 @@
           </div>
           <!-- Column 2: 3D Point Track Visualization -->
           <div class="column is-one-third has-text-centered">
-            <iframe src="./static/track_preds/glass.html" 
-                    width="100%" 
-                    height="400" 
-                    style="border: none; border-radius: 8px;"
-                    allowfullscreen>
-            </iframe>
+            <img src="./static/track_preds/blender/glass.png" alt="Glass 3D Point Tracks" style="border-radius: 8px; width: 100%;">
           </div>
           <!-- Column 3: Rollout -->
           <div class="column is-one-third has-text-centered">
@@ -271,7 +299,99 @@
                    muted 
                    loop 
                    playsinline>
-              <source src="./static/track_preds/glass.mp4" type="video/mp4">
+              <source src="./static/track_preds/glass.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 4: Cup -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/cup.png" alt="Cup Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/cup.png" alt="Cup 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/cup.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 5: Paper -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/paper.png" alt="Paper Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/paper.png" alt="Paper 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/paper.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 6: Drawer -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/drawer.png" alt="Drawer Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/drawer.png" alt="Drawer 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/drawer.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 7: Sock -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <!-- Column 1: Initial Frame -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/sock.png" alt="Sock Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 2: 3D Point Track Visualization -->
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/sock.png" alt="Sock 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <!-- Column 3: Rollout -->
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" 
+                   style="border-radius: 8px;" 
+                   autoplay 
+                   muted 
+                   loop 
+                   playsinline>
+              <source src="./static/track_preds/sock.mov" type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
