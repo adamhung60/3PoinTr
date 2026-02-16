@@ -34,6 +34,62 @@
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/icon.svg">
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Interactive results tables */
+    .results-table-wrapper {
+      overflow-x: auto;
+      margin: 1rem auto;
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      border-top: 2.5px solid #333;
+      border-bottom: 2.5px solid #333;
+    }
+    .results-table thead th {
+      padding: 0.5rem 0.9rem;
+      text-align: center;
+      font-weight: 600;
+      border-bottom: 1.5px solid #333;
+    }
+    .results-table thead th:first-child {
+      text-align: left;
+    }
+    .results-table tbody td {
+      padding: 0.3rem 0.9rem;
+      text-align: center;
+      transition: background-color 0.15s ease;
+    }
+    .results-table tbody td.task-name,
+    .results-table tbody td.method-name {
+      text-align: left;
+    }
+    .results-table tbody tr:hover td {
+      background-color: rgba(55, 126, 184, 0.08);
+    }
+    .results-table .section-header td {
+      font-weight: 700;
+      padding: 0.7rem 0.9rem 0.3rem;
+      border-top: 1.5px solid #333;
+      text-align: left;
+      font-size: 0.93rem;
+    }
+    .results-table tbody tr:first-child td {
+      border-top: none;
+    }
+    .results-table .best {
+      font-weight: 700;
+    }
+    .results-table .task-name {
+      font-weight: 500;
+      vertical-align: middle;
+    }
+
+  </style>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
@@ -140,6 +196,26 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <!-- Teaser Videos. -->
+    <div class="columns is-centered is-vcentered has-text-centered" style="margin-bottom: 0;">
+      <div class="column is-5 has-text-centered">
+        <h3 class="title is-5" style="margin-bottom: 0.75rem;">Casual Human Video Pretraining</h3>
+        <video width="100%" style="border-radius: 8px; aspect-ratio: 1; object-fit: cover; object-position: left;" autoplay muted loop playsinline>
+          <source src="./static/teaser_videos/humanvidstiled.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="column is-narrow has-text-centered" style="padding: 0 0.5rem;">
+        <span style="font-size: 2.5rem; color: #363636;">&#10132;</span>
+      </div>
+      <div class="column is-5 has-text-centered">
+        <h3 class="title is-5" style="margin-bottom: 0.75rem;">Downstream Policy Rollouts</h3>
+        <video width="100%" style="border-radius: 8px; aspect-ratio: 1; object-fit: cover; object-position: left;" autoplay muted loop playsinline>
+          <source src="./static/teaser_videos/rolloutstiled.mov" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <!--/ Teaser Videos. -->
+
     <!-- Teaser. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -188,7 +264,9 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Results: 3D Point Track Prediction</h2>
-        <img src="./static/images/average_metrics_barplot.png" alt="3D Point Track Prediction Results" style="width: 50%;">
+        <div style="max-width: 450px; margin: 0 auto;">
+          <canvas id="flowChart"></canvas>
+        </div>
         <p style="margin-top: 0.5rem; font-size: 0.9rem;">Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters). 3PoinTr outperforms General Flow in both metrics on every task in our experiments. Across all tasks, 3PoinTr achieves average error reductions of 49.1% and 61.8% compared to General Flow.</p>
       </div>
     </div>
@@ -200,15 +278,57 @@
         <h2 class="title is-3">Results: Sample-Efficient Policy Learning</h2>
       </div>
     </div>
-    <div class="columns is-centered">
-      <div class="column is-half has-text-centered">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
         <h3 class="title is-5">Simulation Tasks</h3>
-        <img src="./static/images/sim_plot.png" alt="Simulation Tasks Results" style="width: 100%;">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <canvas id="simChart"></canvas>
+        </div>
         <p style="margin-top: 0.5rem; font-size: 0.9rem;">Simulation task success rate vs. number of robot demonstrations. Results are averaged across the three simulation tasks. 3PoinTr achieves the highest average success rate across all tasks and numbers of demonstrations.</p>
       </div>
-      <div class="column is-half has-text-centered">
+    </div>
+    <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
         <h3 class="title is-5">Real-World Tasks</h3>
-        <img src="./static/images/real_table.png" alt="Real-World Tasks Results" style="width: 100%;">
+        <!-- Interactive real-world success rates table -->
+        <div class="results-table-wrapper" style="max-width: 480px;">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th style="text-align:left">Task</th>
+                <th>ATM</th>
+                <th>DP3</th>
+                <th>3PoinTr</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="task-name">Open Drawer</td>
+                <td>3/10</td>
+                <td>7/10</td>
+                <td class="best">9/10</td>
+              </tr>
+              <tr>
+                <td class="task-name">Right Glass</td>
+                <td>3/10</td>
+                <td>8/10</td>
+                <td class="best">10/10</td>
+              </tr>
+              <tr>
+                <td class="task-name">Throw Away Paper</td>
+                <td>0/10</td>
+                <td>1/10</td>
+                <td class="best">9/10</td>
+              </tr>
+              <tr>
+                <td class="task-name">Fold Sock</td>
+                <td>0/10</td>
+                <td>2/10</td>
+                <td class="best">9/10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates evaluated over 10 rollouts.</p>
       </div>
     </div>
@@ -235,164 +355,101 @@
             <h3 class="title is-5" style="margin-bottom: 0;">Example Policy Rollouts</h3>
           </div>
         </div>
-        <!-- Content row 1: Block Stack -->
+        <!-- Content row 1: Cup -->
         <div class="columns is-vcentered">
-          <!-- Column 1: Initial Frame -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blockstack.png" alt="Block Stack Scene" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 2: 3D Point Track Visualization -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/blockstack.png" alt="Block Stack 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 3: Rollout -->
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
-              <source src="./static/track_preds/blockstack.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-        <!-- Content row 2: Microwave -->
-        <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/microwave.png" alt="Microwave Scene" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 2: 3D Point Track Visualization -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/microwave.png" alt="Microwave 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 3: Rollout -->
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
-              <source src="./static/track_preds/microwave.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-        <!-- Content row 3: Glass -->
-        <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/glass.png" alt="Glass Scene" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 2: 3D Point Track Visualization -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/glass.png" alt="Glass 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 3: Rollout -->
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
-              <source src="./static/track_preds/glass.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-        <!-- Content row 4: Cup -->
-        <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
           <div class="column is-one-third has-text-centered">
             <img src="./static/track_preds/cup.png" alt="Cup Scene" style="border-radius: 8px; width: 100%;">
           </div>
-          <!-- Column 2: 3D Point Track Visualization -->
           <div class="column is-one-third has-text-centered">
             <img src="./static/track_preds/blender/cup.png" alt="Cup 3D Point Tracks" style="border-radius: 8px; width: 100%;">
           </div>
-          <!-- Column 3: Rollout -->
           <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
               <source src="./static/track_preds/cup.mov" type="video/mp4">
-              Your browser does not support the video tag.
             </video>
           </div>
         </div>
-        <!-- Content row 5: Paper -->
+        <!-- Content row 2: Sock -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/paper.png" alt="Paper Scene" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 2: 3D Point Track Visualization -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/paper.png" alt="Paper 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 3: Rollout -->
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
-              <source src="./static/track_preds/paper.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-        <!-- Content row 6: Drawer -->
-        <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/drawer.png" alt="Drawer Scene" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 2: 3D Point Track Visualization -->
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/drawer.png" alt="Drawer 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <!-- Column 3: Rollout -->
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
-              <source src="./static/track_preds/drawer.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-        <!-- Content row 7: Sock -->
-        <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <!-- Column 1: Initial Frame -->
           <div class="column is-one-third has-text-centered">
             <img src="./static/track_preds/sock.png" alt="Sock Scene" style="border-radius: 8px; width: 100%;">
           </div>
-          <!-- Column 2: 3D Point Track Visualization -->
           <div class="column is-one-third has-text-centered">
             <img src="./static/track_preds/blender/sock.png" alt="Sock 3D Point Tracks" style="border-radius: 8px; width: 100%;">
           </div>
-          <!-- Column 3: Rollout -->
           <div class="column is-one-third has-text-centered">
-            <video width="100%" 
-                   style="border-radius: 8px;" 
-                   autoplay 
-                   muted 
-                   loop 
-                   playsinline>
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
               <source src="./static/track_preds/sock.mov" type="video/mp4">
-              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <!-- Content row 3: Paper -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/paper.png" alt="Paper Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/paper.png" alt="Paper 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+              <source src="./static/track_preds/paper.mov" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <!-- Content row 4: Drawer -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/drawer.png" alt="Drawer Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/drawer.png" alt="Drawer 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+              <source src="./static/track_preds/drawer.mov" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <!-- Content row 5: Glass -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/glass.png" alt="Glass Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/glass.png" alt="Glass 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+              <source src="./static/track_preds/glass.mov" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <!-- Content row 6: Microwave -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/microwave.png" alt="Microwave Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/microwave.png" alt="Microwave 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+              <source src="./static/track_preds/microwave.mov" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <!-- Content row 7: Block Stack -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blockstack.png" alt="Block Stack Scene" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <img src="./static/track_preds/blender/blockstack.png" alt="Block Stack 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          </div>
+          <div class="column is-one-third has-text-centered">
+            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+              <source src="./static/track_preds/blockstack.mov" type="video/mp4">
             </video>
           </div>
         </div>
@@ -439,6 +496,185 @@
     </div>
   </div>
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var fontFamily = "'Noto Sans', sans-serif";
+  var noLegendClick = { onClick: function() {} };
+
+  // Plugin to draw value labels on top of bars
+  var datalabelPlugin = {
+    id: 'barLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      chart.data.datasets.forEach(function(dataset, i) {
+        var meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, index) {
+          var value = dataset.data[index];
+          if (value === null || value === undefined) return;
+          ctx.save();
+          ctx.font = 'bold 11px ' + fontFamily;
+          ctx.fillStyle = '#333';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          var decimals = chart.config.options._labelDecimals !== undefined ? chart.config.options._labelDecimals : 1;
+          ctx.fillText(value.toFixed(decimals), bar.x, bar.y - 4);
+          ctx.restore();
+        });
+      });
+    }
+  };
+
+  // Flow chart: average ADE and 5% ADE
+  new Chart(document.getElementById('flowChart'), {
+    type: 'bar',
+    plugins: [datalabelPlugin],
+    data: {
+      labels: ['ADE', '5% ADE'],
+      datasets: [
+        {
+          label: 'General Flow',
+          data: [3.37, 30.79],
+          backgroundColor: 'rgba(55, 126, 184, 0.9)',
+          borderColor: 'rgba(55, 126, 184, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: '3PoinTr',
+          data: [1.41, 9.70],
+          backgroundColor: 'rgba(228, 26, 28, 0.9)',
+          borderColor: 'rgba(228, 26, 28, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        }
+      ]
+    },
+    options: {
+      _labelDecimals: 2,
+      responsive: true,
+      layout: { padding: { top: 20 } },
+      animation: { duration: 600, easing: 'easeOutQuart' },
+      plugins: {
+        legend: {
+          position: 'top',
+          onClick: function() {},
+          labels: { font: { family: fontFamily, size: 12 }, usePointStyle: true, pointStyle: 'rectRounded' }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' mm'; }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Error (mm)', font: { family: fontFamily, size: 12 } },
+          grid: { color: 'rgba(0,0,0,0.08)', drawBorder: false },
+          ticks: { font: { family: fontFamily, size: 11 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: fontFamily, size: 12 } }
+        }
+      }
+    }
+  });
+
+  // Sim chart: success rate vs number of demonstrations (6 methods)
+  new Chart(document.getElementById('simChart'), {
+    type: 'bar',
+    plugins: [datalabelPlugin],
+    data: {
+      labels: ['20', '50', '100'],
+      datasets: [
+        {
+          label: 'AMPLIFY',
+          data: [14.6, 19.7, 25.7],
+          backgroundColor: 'rgba(72, 120, 208, 0.9)',
+          borderColor: 'rgba(72, 120, 208, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'ATM',
+          data: [24.8, 65.6, 83.3],
+          backgroundColor: 'rgba(106, 204, 101, 0.9)',
+          borderColor: 'rgba(106, 204, 101, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'Diffusion Policy',
+          data: [45.0, 61.7, 87.1],
+          backgroundColor: 'rgba(149, 108, 180, 0.9)',
+          borderColor: 'rgba(149, 108, 180, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'DP3',
+          data: [50.2, 83.3, 90.9],
+          backgroundColor: 'rgba(238, 133, 74, 0.9)',
+          borderColor: 'rgba(238, 133, 74, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: '2D Ablation',
+          data: [52.4, 64.6, 66.1],
+          backgroundColor: 'rgba(196, 162, 71, 0.9)',
+          borderColor: 'rgba(196, 162, 71, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: '3PoinTr',
+          data: [89.0, 93.8, 98.6],
+          backgroundColor: 'rgba(228, 26, 28, 0.9)',
+          borderColor: 'rgba(228, 26, 28, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        }
+      ]
+    },
+    options: {
+      _labelDecimals: 1,
+      responsive: true,
+      layout: { padding: { top: 20 } },
+      animation: { duration: 600, easing: 'easeOutQuart' },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          onClick: function() {},
+          labels: { font: { family: fontFamily, size: 11 }, usePointStyle: true, pointStyle: 'rectRounded', padding: 15 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%'; }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          title: { display: true, text: 'Success Rate (%)', font: { family: fontFamily, size: 12 } },
+          grid: { color: 'rgba(0,0,0,0.08)', drawBorder: false },
+          ticks: { font: { family: fontFamily, size: 11 } }
+        },
+        x: {
+          title: { display: true, text: 'Number of Demonstrations', font: { family: fontFamily, size: 12 } },
+          grid: { display: false },
+          ticks: { font: { family: fontFamily, size: 12 } }
+        }
+      }
+    }
+  });
+});
+</script>
 
 </body>
 </html>
