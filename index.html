@@ -204,8 +204,9 @@
           <source src="./static/teaser_videos/humanvidstiled.mov" type="video/mp4">
         </video>
       </div>
-      <div class="column is-narrow has-text-centered" style="padding: 0 0.5rem;">
+      <div class="column is-narrow has-text-centered" style="padding: 0 0.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <span style="font-size: 2.5rem; color: #363636;">&#10132;</span>
+        <img src="./static/images/robot_demos.png" alt="20 Robot Demos" style="width: 50px; margin-top: 0.5rem;">
       </div>
       <div class="column is-5 has-text-centered">
         <h3 class="title is-5" style="margin-bottom: 0.75rem;">Downstream Policy Rollouts</h3>
@@ -264,7 +265,7 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Results: 3D Point Track Prediction</h2>
-        <div style="max-width: 450px; margin: 0 auto;">
+        <div style="max-width: 500px; margin: 0 auto;">
           <canvas id="flowChart"></canvas>
         </div>
         <p style="margin-top: 0.5rem; font-size: 0.9rem;">Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters). 3PoinTr outperforms General Flow in both metrics on every task in our experiments. Across all tasks, 3PoinTr achieves average error reductions of 49.1% and 61.8% compared to General Flow.</p>
@@ -526,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // Flow chart: average ADE and 5% ADE
+  // Flow chart: average ADE and 5% ADE with separate y-axes
   new Chart(document.getElementById('flowChart'), {
     type: 'bar',
     plugins: [datalabelPlugin],
@@ -534,20 +535,40 @@ document.addEventListener('DOMContentLoaded', function() {
       labels: ['ADE', '5% ADE'],
       datasets: [
         {
-          label: 'General Flow',
-          data: [3.37, 30.79],
+          label: 'General Flow (ADE)',
+          data: [3.37, null],
           backgroundColor: 'rgba(55, 126, 184, 0.9)',
           borderColor: 'rgba(55, 126, 184, 1)',
           borderWidth: 1,
-          borderRadius: 2
+          borderRadius: 2,
+          yAxisID: 'yADE'
         },
         {
-          label: '3PoinTr',
-          data: [1.41, 9.70],
+          label: '3PoinTr (ADE)',
+          data: [1.41, null],
           backgroundColor: 'rgba(228, 26, 28, 0.9)',
           borderColor: 'rgba(228, 26, 28, 1)',
           borderWidth: 1,
-          borderRadius: 2
+          borderRadius: 2,
+          yAxisID: 'yADE'
+        },
+        {
+          label: 'General Flow (5% ADE)',
+          data: [null, 30.79],
+          backgroundColor: 'rgba(55, 126, 184, 0.9)',
+          borderColor: 'rgba(55, 126, 184, 1)',
+          borderWidth: 1,
+          borderRadius: 2,
+          yAxisID: 'y5pct'
+        },
+        {
+          label: '3PoinTr (5% ADE)',
+          data: [null, 9.70],
+          backgroundColor: 'rgba(228, 26, 28, 0.9)',
+          borderColor: 'rgba(228, 26, 28, 1)',
+          borderWidth: 1,
+          borderRadius: 2,
+          yAxisID: 'y5pct'
         }
       ]
     },
@@ -558,21 +579,48 @@ document.addEventListener('DOMContentLoaded', function() {
       animation: { duration: 600, easing: 'easeOutQuart' },
       plugins: {
         legend: {
-          position: 'top',
+          display: true,
+          position: 'bottom',
           onClick: function() {},
-          labels: { font: { family: fontFamily, size: 12 }, usePointStyle: true, pointStyle: 'rectRounded' }
+          labels: {
+            font: { family: fontFamily, size: 11 },
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            padding: 15,
+            generateLabels: function(chart) {
+              return [
+                { text: 'General Flow', fillStyle: 'rgba(55, 126, 184, 0.9)', strokeStyle: 'rgba(55, 126, 184, 1)', lineWidth: 1, pointStyle: 'rectRounded', hidden: false },
+                { text: '3PoinTr', fillStyle: 'rgba(228, 26, 28, 0.9)', strokeStyle: 'rgba(228, 26, 28, 1)', lineWidth: 1, pointStyle: 'rectRounded', hidden: false }
+              ];
+            }
+          }
         },
         tooltip: {
           callbacks: {
-            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' mm'; }
+            label: function(ctx) {
+              var label = ctx.dataset.label.includes('General Flow') ? 'General Flow' : '3PoinTr';
+              return label + ': ' + ctx.parsed.y.toFixed(2) + ' mm';
+            }
           }
         }
       },
       scales: {
-        y: {
+        yADE: {
+          type: 'linear',
+          position: 'left',
           beginAtZero: true,
-          title: { display: true, text: 'Error (mm)', font: { family: fontFamily, size: 12 } },
+          max: 4.5,
+          title: { display: true, text: 'ADE (mm)', font: { family: fontFamily, size: 12 } },
           grid: { color: 'rgba(0,0,0,0.08)', drawBorder: false },
+          ticks: { font: { family: fontFamily, size: 11 } }
+        },
+        y5pct: {
+          type: 'linear',
+          position: 'right',
+          beginAtZero: true,
+          max: 40,
+          title: { display: true, text: '5% ADE (mm)', font: { family: fontFamily, size: 12 } },
+          grid: { display: false },
           ticks: { font: { family: fontFamily, size: 11 } }
         },
         x: {
