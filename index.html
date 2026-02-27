@@ -196,6 +196,19 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <!-- Teaser. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img src="./static/images/teaser.png" alt="Teaser" style="width: 100%; margin-bottom: 1rem;">
+        <div class="content has-text-justified">
+          <ol>
+            3PoinTr is a general and scalable method for pretraining manipulation policies with casual human videos. Given an observed point cloud, 3PoinTr answers: <em>how will the scene evolve when completing the task?</em> We contribute a state-of-the-art 3D point track prediction transformer, and use a Perceiver IO architecture and Diffusion Policy to enable state-of-the-art imitation learning.
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!--/ Teaser. -->
+
     <!-- Teaser Videos. -->
     <div class="columns is-centered is-vcentered has-text-centered" style="margin-bottom: 0;">
       <div class="column is-5 has-text-centered">
@@ -216,19 +229,6 @@
       </div>
     </div>
     <!--/ Teaser Videos. -->
-
-    <!-- Teaser. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <img src="./static/images/teaser.png" alt="Teaser" style="width: 100%; margin-bottom: 1rem;">
-        <div class="content has-text-justified">
-          <ol>
-            3PoinTr is a general and scalable method for pretraining manipulation policies with casual human videos. Given an observed point cloud, 3PoinTr answers: <em>how will the scene evolve when completing the task?</em> We contribute a state-of-the-art 3D point track prediction transformer, and use a Perceiver IO architecture and Diffusion Policy to enable state-of-the-art imitation learning.
-          </ol>
-        </div>
-      </div>
-    </div>
-    <!--/ Teaser. -->
 
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
@@ -260,18 +260,6 @@
       </div>
     </div>
     <!--/ Method. -->
-
-    <!-- Results: 3D Point Track Prediction -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Results: 3D Point Track Prediction</h2>
-        <div style="max-width: 500px; margin: 0 auto;">
-          <canvas id="flowChart"></canvas>
-        </div>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters). 3PoinTr outperforms General Flow in both metrics on every task in our experiments. Across all tasks, 3PoinTr achieves average error reductions of 49.1% and 61.8% compared to General Flow.</p>
-      </div>
-    </div>
-    <!--/ Results: 3D Point Track Prediction -->
 
     <!-- Results: Sample-Efficient Policy Learning -->
     <div class="columns is-centered has-text-centered">
@@ -457,6 +445,23 @@
       </div>
     </div>
     <!--/ Flow Visualization. -->
+
+    <!-- Results: 3D Point Track Prediction -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results: 3D Point Track Prediction</h2>
+        <div style="max-width: 500px; margin: 0 auto;">
+          <canvas id="flowChart"></canvas>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;"> 
+          We also evaluate the quality of 3PoinTr's 3D point track predictions.
+          Here we show Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) 
+          for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters). 
+          3PoinTr outperforms General Flow in both metrics on every task in our experiments. 
+          Across all tasks, 3PoinTr achieves <b>average error reductions of 49.1% and 61.8%</b> compared to General Flow.</p>
+      </div>
+    </div>
+    <!--/ Results: 3D Point Track Prediction -->
 
   </div>
 </section>
