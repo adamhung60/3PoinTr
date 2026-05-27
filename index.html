@@ -88,6 +88,17 @@
       vertical-align: middle;
     }
 
+    /* Rollout grid media: force square aspect ratio so videos and images line up */
+    .rollout-media {
+      border-radius: 8px;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: left;
+      display: block;
+      background-color: #f0f0f0;
+    }
+
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -202,8 +213,12 @@
         <img src="./static/images/teaser.png" alt="Teaser" style="width: 100%; margin-bottom: 1rem;">
         <div class="content has-text-justified">
           <ol>
-            3PoinTr is a general and scalable method for pretraining manipulation policies with casual human videos. Given an observed point cloud, 3PoinTr answers: <em>how will the scene evolve when completing the task?</em> We contribute a state-of-the-art 3D point track prediction transformer, and use a Perceiver IO architecture and Diffusion Policy to enable state-of-the-art imitation learning.
-          </ol>
+            3PoinTr learns <i>how the scene moves to complete a task</i> from unconstrained human videos
+            by predicting dense 3D point tracks.
+            We contribute a visibility-aware 3D point track prediction transformer, and a closed-loop multitask policy
+            architecture that conditions on the track predictions.
+            3PoinTr outperforms strong behavior cloning and learning-from-video baselines
+            across simulated and real-world evaluations.</ol>
         </div>
       </div>
     </div>
@@ -235,7 +250,27 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          Data-efficient training of robust robot policies is the key to unlocking automation in a wide array of novel tasks. Current systems require large volumes of demonstrations to achieve robustness, which is impractical in many applications. Learning policies directly from human videos is a promising alternative that removes teleoperation costs, but it shifts the challenge toward overcoming the embodiment gap (differences in kinematics and strategies between robots and humans), often requiring restrictive and carefully choreographed human motions. We propose 3PoinTr, a method for pretraining robot policies from casual and unconstrained human videos, enabling learning from motions natural for humans. 3PoinTr uses a transformer architecture to predict 3D point tracks as an intermediate embodiment-agnostic representation. 3D point tracks encode goal specifications, scene geometry, and spatiotemporal relationships. We use a Perceiver IO architecture to extract a compact representation for sample-efficient behavior cloning, even when point tracks violate downstream embodiment-specific constraints. We conduct thorough evaluation on simulated and real-world tasks, and find that 3PoinTr achieves robust spatial generalization on diverse categories of manipulation tasks with only 20 action-labeled robot demonstrations. 3PoinTr outperforms the baselines, including behavior cloning methods, as well as prior methods for pretraining from human videos. We also provide evaluations of 3PoinTr's 3D point track predictions compared to an existing point track prediction baseline. We find that 3PoinTr produces more accurate and higher quality point tracks due to a lightweight yet expressive architecture built on a single transformer, in addition to a training formulation that preserves  supervision of partially occluded points.
+          Learning manipulation policies from human videos could greatly reduce the need
+for expensive robot demonstrations, but existing approaches typically require
+restrictive assumptions such as choreographed human motions, predefined keypoints,
+manual annotations, or known grasp locations.
+We propose 3PoinTr, a method for pretraining sample-efficient robot policies from <i></i>unconstrained human videos</i>
+by predicting dense 3D point tracks.
+In the unconstrained human demonstration videos,
+humans are free to choose any grasps, hand poses, and trajectories they see fit, rather than choreograph their motions to mimic a robot.
+3PoinTr
+uses a lightweight visibility-aware transformer to learn how scene points should
+move from human videos, and then trains a
+closed-loop multitask robot policy to flexibly extract action-relevant priors from those
+predicted point tracks.
+With only 20 action-labeled robot demonstrations, 3PoinTr achieves
+a <b>25.0%</b> higher average success rate than the strongest behavior cloning
+and video-pretraining baseline on real-world tasks, and a <b>27.4%</b>
+higher average success rate in simulation.
+Targeted ablations support the key design choices and confirm the benefit of
+learning from actionless videos.
+We further show that 3PoinTr's point track prediction transformer outperforms a strong
+baseline by preserving supervision over partially occluded points.
         </div>
       </div>
     </div>
@@ -271,7 +306,7 @@
         <div style="max-width: 600px; margin: 0 auto;">
           <canvas id="simChart"></canvas>
         </div>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Simulation task success rate vs. number of robot demonstrations. Results are averaged across the three simulation tasks. 3PoinTr achieves the highest average success rate across all tasks and numbers of demonstrations.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Simulation task success rate vs. number of robot demonstrations. Results are averaged across the four simulation tasks (Block Stack, Glass, Pot Lid, Open Microwave), evaluated over 200 rollouts per task with 100 actionless videos per task. 3PoinTr achieves the highest average success rate across all numbers of demonstrations.</p>
       </div>
     </div>
     <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
@@ -291,35 +326,54 @@
             <tbody>
               <tr>
                 <td class="task-name">Open Drawer</td>
-                <td>3/10</td>
-                <td>7/10</td>
-                <td class="best">9/10</td>
+                <td>6/20</td>
+                <td>14/20</td>
+                <td class="best">20/20</td>
               </tr>
               <tr>
                 <td class="task-name">Right Glass</td>
-                <td>3/10</td>
-                <td>8/10</td>
-                <td class="best">10/10</td>
+                <td>3/20</td>
+                <td>18/20</td>
+                <td class="best">20/20</td>
               </tr>
               <tr>
                 <td class="task-name">Throw Away Paper</td>
-                <td>0/10</td>
-                <td>1/10</td>
-                <td class="best">9/10</td>
+                <td>0/20</td>
+                <td>9/20</td>
+                <td class="best">18/20</td>
               </tr>
               <tr>
                 <td class="task-name">Fold Sock</td>
-                <td>0/10</td>
-                <td>2/10</td>
-                <td class="best">9/10</td>
+                <td>7/20</td>
+                <td>14/20</td>
+                <td class="best">17/20</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates evaluated over 10 rollouts.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates for policies trained with 20 robot demonstrations and 50 human videos per task, evaluated over 20 rollouts. 3PoinTr achieves the highest success rate on all four tasks, with a 25.0% higher average success rate than the best baseline, DP3.</p>
       </div>
     </div>
     <!--/ Results: Sample-Efficient Policy Learning -->
+
+    <!-- Ablations. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Ablations</h2>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div style="max-width: 720px; margin: 0 auto;">
+          <canvas id="ablationChart"></canvas>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+          Ablation success rates (%) evaluated over 200 rollouts per simulation task, for policies trained with 20 demonstrations.
+          3PoinTr achieves the best average success rate, demonstrating that all four design choices&mdash;3D point tracks, the Perceiver IO encoder, the U-Net cross-attention, and additional human videos&mdash;contribute meaningfully to the final performance.
+        </p>
+      </div>
+    </div>
+    <!--/ Ablations. -->
 
     <!-- Flow Visualization. -->
     <div class="columns is-centered has-text-centered">
@@ -328,115 +382,102 @@
       </div>
     </div>
     <div class="columns is-centered">
-      <div class="column is-full">
-        <!-- Three column layout -->
+      <div class="column is-two-thirds">
+        <!-- Two column layout -->
         <!-- Titles row -->
         <div class="columns" style="margin-top: 1rem; margin-bottom: 0.5rem;">
-          <div class="column is-one-third has-text-centered">
-            <h3 class="title is-5" style="margin-bottom: 0;">Input Point Cloud</h3>
-          </div>
-          <div class="column is-one-third has-text-centered">
+          <div class="column is-half has-text-centered">
             <h3 class="title is-5" style="margin-bottom: 0;">3D Point Track Prediction</h3>
           </div>
-          <div class="column is-one-third has-text-centered">
+          <div class="column is-half has-text-centered">
             <h3 class="title is-5" style="margin-bottom: 0;">Example Policy Rollouts</h3>
           </div>
         </div>
-        <!-- Content row 1: Cup -->
+        <!-- Content row 1: Cup (Right Glass) -->
         <div class="columns is-vcentered">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/cup.png" alt="Cup Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/cup.png" alt="Cup 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/cup.png" alt="Cup 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
               <source src="./static/track_preds/cup.mov" type="video/mp4">
             </video>
           </div>
         </div>
         <!-- Content row 2: Sock -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/sock.png" alt="Sock Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/sock.png" alt="Sock 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/sock.png" alt="Sock 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
               <source src="./static/track_preds/sock.mov" type="video/mp4">
             </video>
           </div>
         </div>
         <!-- Content row 3: Paper -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/paper.png" alt="Paper Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/paper.png" alt="Paper 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/paper.png" alt="Paper 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
               <source src="./static/track_preds/paper.mov" type="video/mp4">
             </video>
           </div>
         </div>
         <!-- Content row 4: Drawer -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/drawer.png" alt="Drawer Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/drawer.png" alt="Drawer 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/drawer.png" alt="Drawer 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
               <source src="./static/track_preds/drawer.mov" type="video/mp4">
             </video>
           </div>
         </div>
-        <!-- Content row 5: Glass -->
+        <!-- Content row 5: Glass (sim) -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/glass.png" alt="Glass Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/glass.png" alt="Glass 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/glass.png" alt="Glass 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
-              <source src="./static/track_preds/glass.mov" type="video/mp4">
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
+              <source src="./static/track_preds/glass.mp4" type="video/mp4">
             </video>
           </div>
         </div>
-        <!-- Content row 6: Microwave -->
+        <!-- Content row 6: Microwave (sim) -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/microwave.png" alt="Microwave Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/microwave.png" alt="Microwave 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/microwave.png" alt="Microwave 3D Point Tracks" style="border-radius: 8px; width: 100%;">
-          </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
-              <source src="./static/track_preds/microwave.mov" type="video/mp4">
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
+              <source src="./static/track_preds/openmicrowave.mp4" type="video/mp4">
             </video>
           </div>
         </div>
-        <!-- Content row 7: Block Stack -->
+        <!-- Content row 7: Block Stack (sim) -->
         <div class="columns is-vcentered" style="margin-top: 2rem;">
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blockstack.png" alt="Block Stack Scene" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/blockstack.png" alt="Block Stack 3D Point Tracks">
           </div>
-          <div class="column is-one-third has-text-centered">
-            <img src="./static/track_preds/blender/blockstack.png" alt="Block Stack 3D Point Tracks" style="border-radius: 8px; width: 100%;">
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
+              <source src="./static/track_preds/blockstack.mp4" type="video/mp4">
+            </video>
           </div>
-          <div class="column is-one-third has-text-centered">
-            <video width="100%" style="border-radius: 8px;" autoplay muted loop playsinline>
-              <source src="./static/track_preds/blockstack.mov" type="video/mp4">
+        </div>
+        <!-- Content row 8: Pot Lid (sim) -->
+        <div class="columns is-vcentered" style="margin-top: 2rem;">
+          <div class="column is-half has-text-centered">
+            <img class="rollout-media" src="./static/track_preds/blender/pickpot.png" alt="Pot Lid 3D Point Tracks">
+          </div>
+          <div class="column is-half has-text-centered">
+            <video class="rollout-media" autoplay muted loop playsinline>
+              <source src="./static/track_preds/pickpot.mp4" type="video/mp4">
             </video>
           </div>
         </div>
@@ -454,9 +495,9 @@
         <p style="margin-top: 0.5rem; font-size: 0.9rem;"> 
           We also evaluate the quality of 3PoinTr's 3D point track predictions.
           Here we show Average Distance Error (ADE) and ADE of the 5% of points that move the most (5% ADE) 
-          for 3PoinTr and General Flow on simulation and real-world tasks (in millimeters). 
-          3PoinTr outperforms General Flow in both metrics on every task in our experiments. 
-          Across all tasks, 3PoinTr achieves <b>average error reductions of 49.1% and 61.8%</b> compared to General Flow.</p>
+          for 3PoinTr and General Flow on <b>real-world tasks</b> (in millimeters). 
+          3PoinTr outperforms General Flow in both metrics on every task, with <b>average
+          error reductions of 28.0% and 44.1%</b> compared to General Flow.</p>
       </div>
     </div>
     <!--/ Results: 3D Point Track Prediction -->
@@ -539,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function() {
       datasets: [
         {
           label: 'General Flow (ADE)',
-          data: [3.37, null],
+          data: [2.46, null],
           backgroundColor: 'rgba(55, 126, 184, 0.9)',
           borderColor: 'rgba(55, 126, 184, 1)',
           borderWidth: 1,
@@ -548,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           label: '3PoinTr (ADE)',
-          data: [1.41, null],
+          data: [1.77, null],
           backgroundColor: 'rgba(228, 26, 28, 0.9)',
           borderColor: 'rgba(228, 26, 28, 1)',
           borderWidth: 1,
@@ -557,7 +598,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           label: 'General Flow (5% ADE)',
-          data: [null, 30.79],
+          data: [null, 19.93],
           backgroundColor: 'rgba(55, 126, 184, 0.9)',
           borderColor: 'rgba(55, 126, 184, 1)',
           borderWidth: 1,
@@ -566,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           label: '3PoinTr (5% ADE)',
-          data: [null, 9.70],
+          data: [null, 11.15],
           backgroundColor: 'rgba(228, 26, 28, 0.9)',
           borderColor: 'rgba(228, 26, 28, 1)',
           borderWidth: 1,
@@ -612,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function() {
           type: 'linear',
           position: 'left',
           beginAtZero: true,
-          max: 4.5,
+          max: 3.5,
           title: { display: true, text: 'ADE (mm)', font: { family: fontFamily, size: 12 } },
           grid: { color: 'rgba(0,0,0,0.08)', drawBorder: false },
           ticks: { font: { family: fontFamily, size: 11 } }
@@ -621,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
           type: 'linear',
           position: 'right',
           beginAtZero: true,
-          max: 40,
+          max: 26,
           title: { display: true, text: '5% ADE (mm)', font: { family: fontFamily, size: 12 } },
           grid: { display: false },
           ticks: { font: { family: fontFamily, size: 11 } }
@@ -634,7 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Sim chart: success rate vs number of demonstrations (6 methods)
+  // Sim chart: success rate vs number of demonstrations (5 methods)
   new Chart(document.getElementById('simChart'), {
     type: 'bar',
     plugins: [datalabelPlugin],
@@ -643,47 +684,39 @@ document.addEventListener('DOMContentLoaded', function() {
       datasets: [
         {
           label: 'AMPLIFY',
-          data: [14.6, 19.7, 25.7],
+          data: [3.1, 4.0, 6.5],
           backgroundColor: 'rgba(72, 120, 208, 0.9)',
           borderColor: 'rgba(72, 120, 208, 1)',
           borderWidth: 1,
           borderRadius: 2
         },
         {
-          label: 'ATM',
-          data: [24.8, 65.6, 83.3],
-          backgroundColor: 'rgba(106, 204, 101, 0.9)',
-          borderColor: 'rgba(106, 204, 101, 1)',
-          borderWidth: 1,
-          borderRadius: 2
-        },
-        {
           label: 'Diffusion Policy',
-          data: [45.0, 61.7, 87.1],
+          data: [23.4, 36.0, 69.1],
           backgroundColor: 'rgba(149, 108, 180, 0.9)',
           borderColor: 'rgba(149, 108, 180, 1)',
           borderWidth: 1,
           borderRadius: 2
         },
         {
+          label: 'ATM',
+          data: [29.1, 54.3, 63.3],
+          backgroundColor: 'rgba(106, 204, 101, 0.9)',
+          borderColor: 'rgba(106, 204, 101, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
           label: 'DP3',
-          data: [50.2, 83.3, 90.9],
+          data: [35.3, 48.1, 65.1],
           backgroundColor: 'rgba(238, 133, 74, 0.9)',
           borderColor: 'rgba(238, 133, 74, 1)',
           borderWidth: 1,
           borderRadius: 2
         },
         {
-          label: '2D Ablation',
-          data: [52.4, 64.6, 66.1],
-          backgroundColor: 'rgba(196, 162, 71, 0.9)',
-          borderColor: 'rgba(196, 162, 71, 1)',
-          borderWidth: 1,
-          borderRadius: 2
-        },
-        {
           label: '3PoinTr',
-          data: [89.0, 93.8, 98.6],
+          data: [62.6, 82.6, 93.3],
           backgroundColor: 'rgba(228, 26, 28, 0.9)',
           borderColor: 'rgba(228, 26, 28, 1)',
           borderWidth: 1,
@@ -720,6 +753,89 @@ document.addEventListener('DOMContentLoaded', function() {
           title: { display: true, text: 'Number of Demonstrations', font: { family: fontFamily, size: 12 } },
           grid: { display: false },
           ticks: { font: { family: fontFamily, size: 12 } }
+        }
+      }
+    }
+  });
+
+  // Ablation chart: per-task success rate at 20 demos
+  new Chart(document.getElementById('ablationChart'), {
+    type: 'bar',
+    plugins: [datalabelPlugin],
+    data: {
+      labels: ['Block Stack', 'Glass', 'Pot Lid', 'Open Microwave'],
+      datasets: [
+        {
+          label: '2D Point Tracks',
+          data: [35.0, 26.5, 44.0, 37.5],
+          backgroundColor: 'rgba(0, 191, 196, 0.9)',
+          borderColor: 'rgba(0, 191, 196, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'No Perceiver IO',
+          data: [24.5, 25.0, 55.5, 29.0],
+          backgroundColor: 'rgba(123, 50, 148, 0.9)',
+          borderColor: 'rgba(123, 50, 148, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'No U-Net XAttn',
+          data: [56.0, 41.0, 62.5, 70.0],
+          backgroundColor: 'rgba(0, 136, 55, 0.9)',
+          borderColor: 'rgba(0, 136, 55, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: 'No Extra Videos',
+          data: [69.0, 19.5, 57.5, 60.0],
+          backgroundColor: 'rgba(223, 194, 125, 0.9)',
+          borderColor: 'rgba(223, 194, 125, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: '3PoinTr',
+          data: [66.0, 43.5, 67.5, 75.0],
+          backgroundColor: 'rgba(228, 26, 28, 0.9)',
+          borderColor: 'rgba(228, 26, 28, 1)',
+          borderWidth: 1,
+          borderRadius: 2
+        }
+      ]
+    },
+    options: {
+      _labelDecimals: 1,
+      responsive: true,
+      layout: { padding: { top: 20 } },
+      animation: { duration: 600, easing: 'easeOutQuart' },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          onClick: function() {},
+          labels: { font: { family: fontFamily, size: 11 }, usePointStyle: true, pointStyle: 'rectRounded', padding: 15 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%'; }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          title: { display: true, text: 'Success Rate (%)', font: { family: fontFamily, size: 12 } },
+          grid: { color: 'rgba(0,0,0,0.08)', drawBorder: false },
+          ticks: { font: { family: fontFamily, size: 11 } }
+        },
+        x: {
+          title: { display: true, text: 'Task', font: { family: fontFamily, size: 12 } },
+          grid: { display: false },
+          ticks: { font: { family: fontFamily, size: 11 } }
         }
       }
     }
