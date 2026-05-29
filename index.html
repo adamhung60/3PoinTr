@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="3D Point Tracks for Robot Manipulation Pretraining from Casual Videos">
+        content="3PoinTr: 3D Point Tracks for Learning Manipulation from Unconstrained Human Videos">
   <meta name="keywords" content="ADD KEYWORDS">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>3PoinTr</title>
@@ -127,7 +127,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">3PoinTr: 3D Point Tracks for Robot Manipulation Pretraining from Casual Videos</h1>
+          <h1 class="title is-2 publication-title">3PoinTr: 3D Point Tracks for Learning Manipulation from Unconstrained Human Videos</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://adamhung60.github.io">Adam Hung</a>,</span>
@@ -146,7 +146,6 @@
             <span class="author-block">Author Names Omitted for Anonymous Review</span>
           </div> -->
 
-          <div class="column has-text-centered">
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
@@ -197,8 +196,6 @@
                   <span>Real-World Data (coming soon)</span>
                 </a>
             </div>
-
-          </div>
         </div>
       </div>
     </div>
@@ -212,13 +209,17 @@
       <div class="column is-four-fifths">
         <img src="./static/images/teaser.png" alt="Teaser" style="width: 100%; margin-bottom: 1rem;">
         <div class="content has-text-justified">
-          <ol>
-            3PoinTr learns <i>how the scene moves to complete a task</i> from unconstrained human videos
-            by predicting dense 3D point tracks.
-            We contribute a visibility-aware 3D point track prediction transformer, and a closed-loop multitask policy
-            architecture that conditions on the track predictions.
+          <p>
+            <b>3PoinTr</b> learns manipulation from <em>unconstrained</em> human videos:
+            videos where the human demonstrator can act freely rather than mimicking
+            target robot kinematics.
+            3PoinTr first predicts dense 3D point tracks —
+            <em>how the scene should move to complete the task</em> —
+            and then conditions a closed-loop
+            multitask policy on these tracks.
             3PoinTr outperforms strong behavior cloning and learning-from-video baselines
-            across simulated and real-world evaluations.</ol>
+            across simulated and real-world evaluations.
+          </p>
         </div>
       </div>
     </div>
@@ -227,7 +228,7 @@
     <!-- Teaser Videos. -->
     <div class="columns is-centered is-vcentered has-text-centered" style="margin-bottom: 0;">
       <div class="column is-5 has-text-centered">
-        <h3 class="title is-5" style="margin-bottom: 0.75rem;">Casual Human Video Pretraining</h3>
+        <h3 class="title is-5" style="margin-bottom: 0.75rem;">Unconstrained Human Video Pretraining</h3>
         <video width="100%" style="border-radius: 8px; aspect-ratio: 1; object-fit: cover; object-position: left;" autoplay muted loop playsinline>
           <source src="./static/teaser_videos/humanvidstiled.mov" type="video/mp4">
         </video>
@@ -250,27 +251,27 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          Learning manipulation policies from human videos could greatly reduce the need
-for expensive robot demonstrations, but existing approaches typically require
-restrictive assumptions such as choreographed human motions, predefined keypoints,
-manual annotations, or known grasp locations.
-We propose 3PoinTr, a method for pretraining sample-efficient robot policies from <i></i>unconstrained human videos</i>
-by predicting dense 3D point tracks.
-In the unconstrained human demonstration videos,
-humans are free to choose any grasps, hand poses, and trajectories they see fit, rather than choreograph their motions to mimic a robot.
-3PoinTr
-uses a lightweight visibility-aware transformer to learn how scene points should
-move from human videos, and then trains a
-closed-loop multitask robot policy to flexibly extract action-relevant priors from those
-predicted point tracks.
-With only 20 action-labeled robot demonstrations, 3PoinTr achieves
-a <b>25.0%</b> higher average success rate than the strongest behavior cloning
-and video-pretraining baseline on real-world tasks, and a <b>27.4%</b>
-higher average success rate in simulation.
-Targeted ablations support the key design choices and confirm the benefit of
-learning from actionless videos.
-We further show that 3PoinTr's point track prediction transformer outperforms a strong
-baseline by preserving supervision over partially occluded points.
+          Learning manipulation policies from human videos could greatly
+          reduce the need for expensive robot demonstrations, but existing
+          approaches typically require restrictive assumptions such as
+          choreographed human motions, predefined keypoints, manual annotations,
+          or known grasp locations. We propose 3PoinTr, a method for pretraining
+          sample-efficient robot policies from unconstrained human videos
+          by predicting dense 3D point tracks. In the unconstrained human
+          demonstration videos, humans are free to follow whatever trajectories
+          and manipulation strategies they see fit, rather than choreographing
+          their motions to mimic a robot. 3PoinTr uses a lightweight visibility-aware
+          transformer to learn how scene points should move from human videos,
+          and then trains a closed-loop multitask robot policy to flexibly
+          extract action-relevant priors from those predicted point tracks.
+          With only 20 action-labeled robot demonstrations,
+          3PoinTr achieves a <b>25.0</b> percentage point higher average success rate than the
+          strongest behavior cloning and video-pretraining baseline on real-world tasks,
+          and a <b>29.6</b> percentage point higher average success rate in simulation.
+          Targeted ablations support the key design choices and confirm the benefit
+          of learning from actionless videos. We further show that 3PoinTr’s
+          point track prediction transformer outperforms a strong baseline by
+          preserving supervision over partially occluded points.
         </div>
       </div>
     </div>
@@ -283,11 +284,16 @@ baseline by preserving supervision over partially occluded points.
         <img src="./static/images/method.png" alt="Model Architecture" style="width: 100%;">
         <div class="content has-text-justified" style="margin-top: 1rem;">
           <p>
-            Diagram of the 3PoinTr network architecture. 
-            We first encode an initial point cloud, pass through a transformer decoder, and project each point token to a 3D point trajectory. 
-            This yields dense 3D point tracks that encode goal specifications, scene geometry, and spatiotemporal relationships.
-            We then aggregate the per-point trajectory features using a Perceiver IO-style cross-attention module. A small set of learned query tokens attends to the full set of point track tokens, producing a compact global representation of the task.
-            This representation is used as conditioning input to a Diffusion Policy, which generates an open-loop sequence of robot actions.
+            Diagram of the 3PoinTr network architecture.
+            Given an initial point cloud, a transformer predicts dense 3D point tracks
+            describing how objects should evolve during the task.
+            A Perceiver-IO point track encoder compresses these tracks into a small set of
+            learned point track tokens.
+            The policy conditions on these point track tokens together with the current point
+            cloud and robot state, enabling closed-loop action prediction.
+            Beyond global conditioning, residual track-token cross-attention in every
+            U-Net block gives the action head a direct path to the predicted object
+            motion, encouraging a simpler mapping from point tracks to robot actions.
           </p>
         </div>
       </div>
@@ -306,7 +312,13 @@ baseline by preserving supervision over partially occluded points.
         <div style="max-width: 600px; margin: 0 auto;">
           <canvas id="simChart"></canvas>
         </div>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Simulation task success rate vs. number of robot demonstrations. Results are averaged across the four simulation tasks (Block Stack, Glass, Pot Lid, Open Microwave), evaluated over 200 rollouts per task with 100 actionless videos per task. 3PoinTr achieves the highest average success rate across all numbers of demonstrations.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+          Simulation success rates (%) evaluated over 200 rollouts per task.
+          Results are reported for policies trained with 20, 50, and 100 action-labeled
+          demonstrations and 100 actionless videos per task.
+          3PoinTr achieves the highest average success rate across all numbers
+          of demonstrations.
+        </p>
       </div>
     </div>
     <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
@@ -351,7 +363,7 @@ baseline by preserving supervision over partially occluded points.
             </tbody>
           </table>
         </div>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates for policies trained with 20 robot demonstrations and 50 human videos per task, evaluated over 20 rollouts. 3PoinTr achieves the highest success rate on all four tasks, with a 25.0% higher average success rate than the best baseline, DP3.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Real-world success rates for policies trained with 20 robot demonstrations and 50 human videos per task, evaluated over 20 rollouts. 3PoinTr achieves the highest success rate on all four tasks, with a 25.0 percentage point higher average success rate than the best baseline, DP3.</p>
       </div>
     </div>
     <!--/ Results: Sample-Efficient Policy Learning -->
@@ -523,7 +535,7 @@ baseline by preserving supervision over partially occluded points.
     <h2 class="title">BibTeX</h2>
     <pre><code>
       @article{3pointr,
-    title={3PoinTr: 3D Point Tracks for Robot Manipulation Pretraining from Casual Videos},
+    title={3PoinTr: 3D Point Tracks for Learning Manipulation from Unconstrained Human Videos},
     author={Hung, Adam and Duisterhof, Bardienus P. and Ichnowski, Jeffrey},
     journal={arXiv preprint arXiv:2603.08485},
     year={2026}
@@ -799,7 +811,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           label: '3PoinTr',
-          data: [66.0, 43.5, 67.5, 75.0],
+          data: [66.0, 51.0, 67.5, 75.0],
           backgroundColor: 'rgba(228, 26, 28, 0.9)',
           borderColor: 'rgba(228, 26, 28, 1)',
           borderWidth: 1,
